@@ -1,184 +1,146 @@
 #include <iostream>
 #include <string>
 #include <deque>
+#include <algorithm>
 
 using namespace std;
 
+
+
 int main()
 {
-
 	deque<char> operators;
 	deque<int> nums;
-	int index = 0;
-	string expression = "1+2*4+9-6";
 	string temp = "";
 	int curr_result = 0;
 	int result;
-	for (int i = 0; i < expression.size(); ++i)
-	{
-		if (i == expression.size() - 1)
+	bool again = false;
+	bool invalid_input = false;
+	string input;
+	do {
+		if (invalid_input)
 		{
-			temp += expression[i];
+			cout << "Sorry you entered the wrong expression, please try again";
 		}
-
-		if (!(expression[i] == '+' || expression[i] == '-'
-			|| expression[i] == '*' || expression[i] == '/' || i == expression.size() - 1))
+		cin >> expression;
+		for (int i = 0; i < expression.size(); ++i)
 		{
-			temp += expression[i];
-			//cout << temp << endl;
-		}
-
-		if (expression[i] == '6' || expression[i] == '9')
-		{
-			cout << "Here" << endl << endl;
-		}
-
-		else
-		{
-			//cout << temp << endl << endl;
-			nums.push_back(stoi(temp));
-			//cout << temp << endl << endl;
-			if (!(i == expression.size() - 1))
+			if (!(expression[i] == '+' || expression[i] == '-'
+				|| expression[i] == '*' || expression[i] == '/' || (int(expression[i]) > 48 && int(expression[i]) < 57)))
 			{
-				temp = "";
+				cout << int(expression[i]) << endl << endl;
+				invalid_input = true;
 			}
-			if (nums.size() > 1)
+			if (i == expression.size() - 1)
 			{
-				if (operators.back() == '*' || operators.back() == '/')
+				temp += expression[i];
+			}
+
+			if (!(expression[i] == '+' || expression[i] == '-'
+				|| expression[i] == '*' || expression[i] == '/' || i == expression.size() - 1))
+			{
+				temp += expression[i];
+			}
+			else
+			{
+				nums.push_back(stoi(temp));
+				temp = "";
+
+				if (nums.size() > 1)
 				{
-					if (operators.back() == '*')
+					if (operators.back() == '*' || operators.back() == '/')
 					{
-						curr_result = nums.back() * nums[nums.size() - 2];
-						operators.pop_back();
-						nums.pop_back();
-						nums.pop_back();
-						nums.push_back(curr_result);
-						////cout << curr_result << endl;
-					}
-					else
-					{
-						curr_result = nums[nums.size() - 2] / nums.back();
-						operators.pop_back();
-						nums.pop_back();
-						nums.pop_back();
-						nums.push_back(curr_result);
+						if (operators.back() == '*')
+						{
+							curr_result = nums.back() * nums[nums.size() - 2];
+							operators.pop_back();
+							nums.pop_back();
+							nums.pop_back();
+							nums.push_back(curr_result);
+						}
+						else
+						{
+							curr_result = nums[nums.size() - 2] / nums.back();
+							operators.pop_back();
+							nums.pop_back();
+							nums.pop_back();
+							nums.push_back(curr_result);
+						}
 					}
 
-					//cout << nums.back() << endl << endl;
-					//cout << nums[nums.size() - 2] << endl << endl;
-					
+					else if (expression[i] == '+' || expression[i] == '-')
+					{
+						if (operators.front() == '+')
+						{
+							curr_result = nums.front() + nums[1];
+							operators.pop_front();
+							nums.pop_front();
+							nums.pop_front();
+							nums.push_front(curr_result);
+						}
+						else if (operators.front() == '-')
+						{
+							curr_result = nums.front() - nums[1];
+							operators.pop_front();
+							nums.pop_front();
+							nums.pop_front();
+							nums.push_front(curr_result);
+						}
+
+					}
 				}
+			}
+			if (expression[i] == '+' || expression[i] == '-'
+				|| expression[i] == '*' || expression[i] == '/')
+			{
+				operators.push_back(expression[i]);
+			}
 
-				else if (expression[i] == '+' || expression[i] == '-')
+			if (i == expression.size() - 1)
+			{
+				result = nums.back();
+				while (!operators.empty())
 				{
-					//cout << operators.front() << endl << endl;
 					if (operators.front() == '+')
 					{
-						curr_result = nums.front() + nums[1];
+						result = nums.front() + nums[1];
+						nums.pop_front();
+						nums.pop_front();
 						operators.pop_front();
-						nums.pop_front();
-						nums.pop_front();
-						nums.push_front(curr_result);
+						nums.push_front(result);
 					}
 					else if (operators.front() == '-')
 					{
-						curr_result = nums[1] - nums.front();
+						result = nums.front() - nums[1];
+						nums.pop_front();
+						nums.pop_front();
 						operators.pop_front();
-						nums.pop_front();
-						nums.pop_front();
-						nums.push_front(curr_result);
+						nums.push_front(result);
 					}
-					
 				}
-				//nums.push_front(curr_result);
-				//cout << curr_result << endl << endl;
+
 			}
 		}
-		if (expression[i] == '+' || expression[i] == '-'
-			|| expression[i] == '*' || expression[i] == '/')
+		nums.pop_back();
+		cout << result << endl << endl;
+		cout << "Want to run the calculaltor again?[yes, no]";
+		cin >> input;
+		transform(input.begin(), input.end(), input.begin(), ::toupper);
+		if (input == "YES")
 		{
-			operators.push_back(expression[i]);
+			again = true;
 		}
-
-		if (i == expression.size() - 1)
+		else
 		{
-			if (operators.front() == '+')
-			{
-				result = nums.front() + nums[1];
-				nums.pop_back();
-				nums.pop_back();
-				operators.pop_back();
-				nums.push_back(result);
-			}
-			else if (operators.front() == '-')
-			{
-				result = nums[1] - nums.front();
-				nums.pop_back();
-				nums.pop_back();
-				operators.pop_back();
-				nums.push_back(result);
-			}
-			else if (operators.front() == '*')
-			{
-				result = nums.front() * nums[1];
-				nums.pop_back();
-				nums.pop_back();
-				operators.pop_back();
-				nums.push_back(result);
-			}
-			else if (operators.front() == '/')
-			{
-				result = nums[0] / nums[1];
-				nums.pop_back();
-				nums.pop_back();
-				operators.pop_back();
-				nums.push_back(result);
-			}
+			again = false;
 		}
-		//cout << curr_result << endl << endl;
-	}
-	//nums.push_back(stoi(temp));
 
-	//Need to do the very last operation
 
-	/*if (operators.front() == '+')
-	{
-		result = nums.front() + nums[1];
-		nums.pop_back();
-		nums.pop_back();
-		operators.pop_back();
-		nums.push_back(result);
-	}
+	} while (invalid_input || again);
 
-	else if (operators.front() == '-')
-	{
-		result = nums[1] - nums.front();
-		nums.pop_back();
-		nums.pop_back();
-		operators.pop_back();
-		nums.push_back(result);
-	}
-
-	else if (operators.front() == '*')
-	{
-		result = nums.front() * nums[1];
-		nums.pop_back();
-		nums.pop_back();
-		operators.pop_back();
-		nums.push_back(result);
-	}
-
-	else if (operators.front() == '/')
-	{
-		result = nums[nums.size() - 2] / nums.back();
-		nums.pop_back();
-		nums.pop_back();
-		operators.pop_back();
-		nums.push_back(result);
-	}*/
-
-	cout << endl << endl << nums.front() << endl << endl;
-	
+	cout << "Thanks for using our amazing calculator";
+	cout << "Have a wonderful day :)";
+	//cout << endl << endl << nums.front() << endl << endl;
 	system("pause");
 	return 0;
 }
