@@ -54,6 +54,16 @@ void run_again()
 	cout << "\n  Want to run the calculator again? [yes, no]: ";
 }
 
+void bye_message()
+{
+	cout << "\n\n";
+	cout << char_repeater(104, '*');
+	cout << "  ** Thanks for using our amazing calculator                                                            **\n";
+	cout << "  ** Have a wonderful day :)                                                                            **\n";
+	cout << char_repeater(104, '*');
+	cout << "\n";
+}
+
 
 int main()
 {
@@ -67,19 +77,23 @@ int main()
 	bool invalid_input = false;
 	string input;
 	do {
+		operators.clear();
+		nums.clear();
 		system("cls");
 		if (invalid_input)
 		{
 			invalid_input_message();
 		}
 		welcome_message();
+		again = false;
+		invalid_input = false;
+		result = 0;
 		cin >> expression;
 		for (int i = 0; i < expression.size(); ++i)
 		{
 			if (!(expression[i] == '+' || expression[i] == '-'
 				|| expression[i] == '*' || expression[i] == '/' || (int(expression[i]) >= 48 && int(expression[i]) <= 57)))
 			{
-				cout << int(expression[i]) << endl << endl;
 				invalid_input = true;
 				break;
 			}
@@ -160,6 +174,11 @@ int main()
 
 			if (i == expression.size() - 1)
 			{
+				if (nums.size() == 1 && operators.size() == 1)
+				{
+					invalid_input = true;
+					break;
+				}
 				result = nums.back();
 				while (!operators.empty())
 				{
@@ -200,9 +219,7 @@ int main()
 			}
 		}
 	} while (invalid_input || again);
-
-	cout << "Thanks for using our amazing calculator";
-	cout << "Have a wonderful day :)";
+	bye_message();
 	//cout << endl << endl << nums.front() << endl << endl;
 	system("pause");
 	return 0;
