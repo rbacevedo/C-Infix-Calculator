@@ -6,6 +6,7 @@
 #include "Calculator_Class.h"
 using namespace std;
 
+// Repeat character values for aesthetic purposes
 string Calculator::char_repeater(int n, char x)
 {
 	string character = "  ";
@@ -17,7 +18,7 @@ string Calculator::char_repeater(int n, char x)
 	return character;
 }
 
-
+// Calculator Welcome Message
 void Calculator::welcome_message()
 {
 	cout << char_repeater(104, '*');
@@ -30,6 +31,7 @@ void Calculator::welcome_message()
 	cout << "  Input Expression = ";
 }
 
+// Message if you inputted an invalid input
 void Calculator::invalid_input_message()
 {
 	system("cls");
@@ -39,6 +41,7 @@ void Calculator::invalid_input_message()
 	cout << "\n";
 }
 
+// Result of the particular calculation
 void Calculator::result_message()
 {
 	cout << "\n";
@@ -49,11 +52,13 @@ void Calculator::result_message()
 	cout << "\n";
 }
 
+// Message to prompt the user to run the calculator again
 void Calculator::run_again()
 {
 	cout << "\n  Want to run the calculator again? [yes, no]: ";
 }
 
+// Bye message
 void Calculator::bye_message()
 {
 	cout << "\n\n";
@@ -64,21 +69,27 @@ void Calculator::bye_message()
 	cout << "\n";
 }
 
+// Use the infix calculator
 void Calculator::calculate()
 {
 	do {
+		//clear the values in case that invalid input was given
 		operators.clear();
 		nums.clear();
 		system("cls");
+		// if invalid input was given
 		if (invalid_input)
 		{
 			invalid_input_message();
 		}
+		// welcome message
 		welcome_message();
 		again = false;
 		invalid_input = false;
 		result = 0;
+		// Inputting expression
 		cin >> expression;
+		// loop to parse the input string and perform the desired operations
 		for (int i = 0; i < expression.size(); ++i)
 		{
 			if (!(expression[i] == '+' || expression[i] == '-'
@@ -156,14 +167,17 @@ void Calculator::calculate()
 					}
 				}
 			}
+			//place the new operator value after the operation has been performed
 			if (expression[i] == '+' || expression[i] == '-'
 				|| expression[i] == '*' || expression[i] == '/')
 			{
 				operators.push_back(expression[i]);
 			}
 
+			//If there are any elements left in the deques perform the required operations on them
 			if (i == expression.size() - 1)
 			{
+				// If user inputs 2+ or something similar repeat the loop
 				if (nums.size() == 1 && operators.size() == 1)
 				{
 					invalid_input = true;
@@ -208,6 +222,6 @@ void Calculator::calculate()
 				again = false;
 			}
 		}
-	} while (invalid_input || again);
+	} while (invalid_input || again); //Run loop as long as the user wants to keep calculaing or invalid input was given
 	bye_message();
 }

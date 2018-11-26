@@ -1,8 +1,3 @@
-#include <iostream>
-#include <string>
-#include <deque>
-#include <algorithm>
-#include <windows.h>
 #include "Calculator_Class.h"
 
 using namespace std;
