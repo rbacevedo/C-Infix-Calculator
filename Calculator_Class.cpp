@@ -3,10 +3,10 @@
 #include <deque>
 #include <algorithm>
 #include <windows.h>
-
+#include "Calculator_Class.h"
 using namespace std;
 
-string char_repeater(int n, char x)
+string Calculator::char_repeater(int n, char x)
 {
 	string character = "  ";
 	for (; n > 0; n--)
@@ -18,7 +18,7 @@ string char_repeater(int n, char x)
 }
 
 
-void welcome_message()
+void Calculator::welcome_message()
 {
 	cout << char_repeater(104, '*');
 	cout << "  ** Hello Welcome to the calculator of your dreams                                                     **\n";
@@ -30,7 +30,7 @@ void welcome_message()
 	cout << "  Input Expression = ";
 }
 
-void invalid_input_message()
+void Calculator::invalid_input_message()
 {
 	system("cls");
 	cout << char_repeater(104, '*');
@@ -39,7 +39,7 @@ void invalid_input_message()
 	cout << "\n";
 }
 
-void result_message(int result)
+void Calculator::result_message()
 {
 	cout << "\n";
 	cout << char_repeater(40, '*');
@@ -49,12 +49,12 @@ void result_message(int result)
 	cout << "\n";
 }
 
-void run_again()
+void Calculator::run_again()
 {
 	cout << "\n  Want to run the calculator again? [yes, no]: ";
 }
 
-void bye_message()
+void Calculator::bye_message()
 {
 	cout << "\n\n";
 	cout << char_repeater(104, '*');
@@ -64,18 +64,8 @@ void bye_message()
 	cout << "\n";
 }
 
-
-int main()
+void Calculator::calculate()
 {
-	string expression;
-	deque<char> operators;
-	deque<int> nums;
-	string temp = "";
-	int curr_result = 0;
-	int result = 0;
-	bool again = false;
-	bool invalid_input = false;
-	string input;
 	do {
 		operators.clear();
 		nums.clear();
@@ -202,7 +192,7 @@ int main()
 
 			}
 		}
-		result_message(result);
+		result_message();
 		if (!invalid_input)
 		{
 			nums.pop_back();
@@ -220,7 +210,4 @@ int main()
 		}
 	} while (invalid_input || again);
 	bye_message();
-	//cout << endl << endl << nums.front() << endl << endl;
-	system("pause");
-	return 0;
 }
